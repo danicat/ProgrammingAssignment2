@@ -5,11 +5,14 @@
 ##
 ## Author: Daniela Petruzalek @ 29-apr-16
 
-## makeCacheMatrix: constructor for a matrix that encapsulates the methods to:
-# 1.  set the value of the matrix
-# 2.  get the value of the matrix
-# 3.  set the value of the inverse matrix
-# 4.  get the value of the inverse matrix
+## makeCacheMatrix: 
+#  This function creates a special type of matrix that can cache its inverse.
+#  It encapsulates the methods to:
+#
+# 1.  set the value of the matrix (set)
+# 2.  get the value of the matrix (get)
+# 3.  set the value of the inverse matrix (setinverse)
+# 4.  get the value of the inverse matrix (getinverse)
 
 makeCacheMatrix <- function(x = matrix()) {
         inv_m <- NULL ## inverse matrix
@@ -25,9 +28,11 @@ makeCacheMatrix <- function(x = matrix()) {
              getinverse = getinverse)      
 }
 
-
-## cacheSolve: calculates the inverse of a matrix and caches its result for repeated use
-
+## cacheSolve: this function computes the inverse of the special matrix returned by 
+#  makeCacheMatrix. If it finds that the value is already in cache, it returns the cache. 
+#  If not, it will compute the inverse using solve(...) and store the value for future use.
+#
+#  Note: this function assumes that the matrix is always invertible.
 cacheSolve <- function(x, ...) {
         inv <- x$getinverse()
         if(!is.null(inv)) {
@@ -35,13 +40,13 @@ cacheSolve <- function(x, ...) {
                 return(inv)
         }
         matrix <- x$get()
-        inv <- solve(matrix, ...)
+        inv <- solve(matrix, ...) ## expensive computation!
         x$setinverse(inv)
         inv
 }
 
-## Test case
-##
+## Sample test case
+#
 # > m <- makeCacheMatrix(matrix(1:4,2,2))
 # > m$getinverse()
 # NULL
